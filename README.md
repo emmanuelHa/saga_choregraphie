@@ -28,6 +28,9 @@ PS : tous les évènements (xxxPrepared) ne sont pas consommés mais cela suffit
 ## Pre-requis : 
 install docker and docker compose :  
 https://docs.docker.com/compose/install/
+
+## Demarrer le cluster kafka :
+
 Lancer Zookeeper et Kafka cluster  
 ```
 > docker-compose -f infra/src/main/docker/kafka.yml up -d
@@ -42,7 +45,11 @@ Pour visualiser que les containers sont bien up :
 > docker ps
 ```
 
-## Demo
+Pensez à bien stopper le cluster à la fin de vos essais.  
+Si au premier demarrage un des containers tombe alors stoppez puis redemarrez le tout. 
+(relancer Zookeeper et Kafka cluster)
+
+## Demarrer les process :
 Demarrer chacun des micro service :
 ```
 > java -jar billing/target/billing.jar
@@ -52,7 +59,7 @@ Demarrer chacun des micro service :
 > java -jar stock/target/stock.jar
 > java -jar clientui/target/clientui.jar
 ```
-##DEMO :  
+## DEMO :  
 1/ Ajouter un stock en base :
 http://localhost:9003/swagger-ui/#/stock-controller/ajouterCommandeUsingPOST
 Exemple :
@@ -100,14 +107,21 @@ avec un transactionId de l'étape 4
 - https://docs.spring.io/spring-kafka/reference/html/  
 - https://thepracticaldeveloper.com/spring-boot-kafka-config/
 
-RAF : 
+#### RAF : 
 - Ajouter des TI pour le cluster Kafka avec un embedded cluster 
 - Il reste des corrections à apporter pour la stabilité et la gestion des erreurs imprévues  
+- Rendre explicite la conf du nombre de retry, le delai de retry, avoir une DLQ ...
 D'ordre générale NE PAS DEBUGGER des clients consumers kafka
 
+## Conclusion :  
+La version chorégraphie est moins lisible que la version l'orchestrateur.   
 Spring kakfa n'est peut être pas adapté pour une implémentation des Sagas en entreprise car 
 encore trop bas niveau.  
 Voir Axon ou bien https://github.com/eventuate-tram/eventuate-tram-core
+
+Ce repository se base sur le repository suivant :  
+https://github.com/Spaceva/MasterClassSagaPattern/ en dotnet qui utilise 
+le framework massTransit https://masstransit-project.com/
 
 
 
